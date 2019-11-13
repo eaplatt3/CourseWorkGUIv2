@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseWorkGUIv2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Course Work GUI v2 - Earl Platt III" Height="450" Width="800">
     <Grid>
-        
+        <ListBox HorizontalAlignment="Left" Height="338" Margin="10,72,0,0" VerticalAlignment="Top" Width="207"/>
+        <Label Content="Submissions" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="107"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="381,91,0,0" TextWrapping="Wrap" Text=" " VerticalAlignment="Top" Width="273" IsReadOnly="True"/>
+        <Label Content="Assignment Name" HorizontalAlignment="Left" Margin="255,88,0,0" VerticalAlignment="Top" Width="126"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="381,134,0,0" TextWrapping="Wrap" Text=" " VerticalAlignment="Top" Width="273" IsReadOnly="True"/>
+        <Label Content="Category Name" HorizontalAlignment="Left" Margin="255,131,0,0" VerticalAlignment="Top" Width="126"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="381,178,0,0" TextWrapping="Wrap" Text=" " VerticalAlignment="Top" Width="273" IsReadOnly="True"/>
+        <Label Content="Grade" HorizontalAlignment="Left" Margin="255,176,0,0" VerticalAlignment="Top" Width="126"/>
+
     </Grid>
 </Window>
