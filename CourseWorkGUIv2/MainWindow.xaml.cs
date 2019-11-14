@@ -25,5 +25,35 @@ namespace CourseWorkGUIv2
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Method to Exit Program
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuItemExit_Click(object sender, RoutedEventArgs e)
+        {
+            System.Environment.Exit(1);
+        }
+
+        /// <summary>
+        /// Method to Import Json File
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void importFileMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Method to Display About Pop-up
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void aboutMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
