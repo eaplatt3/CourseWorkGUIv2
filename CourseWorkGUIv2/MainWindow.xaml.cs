@@ -115,8 +115,10 @@ namespace CourseWorkGUIv2
                 "integrated security=SSPI;" +
                 "database=Submissions" + "MultipleActiveresultSets = True";
 
-                string sql = string.Format("INSERT INTO Submissions" + 
-                "(AssignmentName) Values" + (work.Assigments.ToString()));
+                string sql = string.Format("INSERT INTO Salary" +
+                        "(CategoryName, AssignmentName , Grade) Values" +
+                        "('{0}', '{1}', '{2}')", ass.CategoryName, ass.AssignmantName, ass.Grade);
+
 
                 SqlConnection sqlConn;
                 sqlConn = new SqlConnection(connString);
