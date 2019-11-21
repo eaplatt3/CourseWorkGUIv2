@@ -27,7 +27,7 @@ namespace CourseWorkGUIv2
     {
         #region
         //Variables
-        string fileNameRead;
+        string fileNameRead = " ";
 
         //Creates CourseWork Object
         CourseWork work = new CourseWork();
@@ -78,12 +78,12 @@ namespace CourseWorkGUIv2
             ofd.ShowReadOnly = true;
 
 
-           // if (ofd.ShowDialog() == true)
-          //  {
+            if (ofd.ShowDialog() == true)
+            {
                // fileNameTextBox.Text = ofd.FileName;
-               // fileNameRead = ofd.FileName;
-          //  }
-           // else { return; }
+               fileNameRead = ofd.FileName;
+            }
+            else { return; }
 
             //Reads File to End
             FileStream reader = new FileStream(fileNameRead, FileMode.Open, FileAccess.Read);
@@ -106,18 +106,20 @@ namespace CourseWorkGUIv2
             /// Process To Load Data Into Database
             /// Uses Foreach Loops to Populate Database
             /////////////////////////////////////////////
-            foreach(Assignment ass in work.Assigments)
+
+            foreach (Submission sub in work.Submissions)
             {
                 /////////////////////////////////////////////////////////
                 /// Connection to the Database
                 //////////////////////////////////////////////////////
+
                 string connString = @"server=(LocalDB)\MSSQLLocalDB;" +
                 "integrated security=SSPI;" +
-                "database=Submissions" + "MultipleActiveresultSets = True";
+                "database=CourseWork;" + "MultipleActiveresultSets = True";
 
-                string sql = string.Format("INSERT INTO Salary" +
-                        "(CategoryName, AssignmentName , Grade) Values" +
-                        "('{0}', '{1}', '{2}')", ass.CategoryName, ass.AssignmantName, ass.Grade);
+                string sql = string.Format("INSERT INTO Submissions" +
+                        "(AssignmentName, CategoryName, Grade) Values" +
+                        "('{0}', '{1}', '{2}')", sub.AssignmentName, sub.CategoryName, sub.Grade);
 
 
                 SqlConnection sqlConn;
@@ -126,7 +128,13 @@ namespace CourseWorkGUIv2
 
                 SqlCommand command = new SqlCommand(sql, sqlConn);
                 int rowsAffected = command.ExecuteNonQuery();
-                
+
+                string sqls = "SELECT AssignmentName FROM Submissions";
+                SqlCommand commands = new SqlCommand(sqls, sqlConn);
+                SqlDataReader read = commands.ExecuteReader();
+
+                submissionsListBox.ItemsSource = read;
+
             }
 
 
@@ -135,22 +143,14 @@ namespace CourseWorkGUIv2
             /// Uses Foreach Loops & Sets Texts Boxes
             /////////////////////////////////////////////
             #region
-            /*/Populates ListView for Category
-            foreach (Category cat in work.Categories)
-            {
-                categoriesListView.Items.Add(cat);
-            }
-
-            //Populates ListView for Assignment
-            foreach (Assignment ass in work.Assigments)
-            {
-                assignmentsListView.Items.Add(ass);
-            }
 
             //Populates ListView for Submission
-            foreach (Submission sub in work.Submissions)
+            
+            
+            
+           /* foreach (Submission sub in work.Submissions)
             {
-                submissionListView.Items.Add(sub);
+                
             }
 
             //Populates TextBox for Course Name
