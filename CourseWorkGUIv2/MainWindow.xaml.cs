@@ -129,7 +129,7 @@ namespace CourseWorkGUIv2
                 SqlCommand command = new SqlCommand(sql, sqlConn);
                 int rowsAffected = command.ExecuteNonQuery();
 
-                string sqls = "SELECT AssignmentName FROM Submissions";
+                string sqls = "SELECT AssignmentName FROM Submissions;";
                 SqlCommand commands = new SqlCommand(sqls, sqlConn);
                 SqlDataReader read = commands.ExecuteReader();
 
