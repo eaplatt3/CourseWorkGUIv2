@@ -28,6 +28,7 @@ namespace CourseWorkGUIv2
         #region
         //Variables
         string fileNameRead = " ";
+        SqlConnection sqlConn;
 
         //Creates CourseWork Object
         CourseWork work = new CourseWork();
@@ -86,8 +87,8 @@ namespace CourseWorkGUIv2
             else { return; }
 
             //Reads File to End
-            FileStream reader = new FileStream(fileNameRead, FileMode.Open, FileAccess.Read);
-            StreamReader streamReader = new StreamReader(reader, Encoding.UTF8);
+            FileStream read = new FileStream(fileNameRead, FileMode.Open, FileAccess.Read);
+            StreamReader streamReader = new StreamReader(read, Encoding.UTF8);
             string jsonString = streamReader.ReadToEnd();
 
             //Creates a Byte Array from the Json String
@@ -122,7 +123,7 @@ namespace CourseWorkGUIv2
                         "('{0}', '{1}', '{2}')", sub.AssignmentName, sub.CategoryName, sub.Grade);
 
 
-                SqlConnection sqlConn;
+                
                 sqlConn = new SqlConnection(connString);
                 sqlConn.Open();
 
@@ -131,48 +132,53 @@ namespace CourseWorkGUIv2
 
                 string sqls = "SELECT AssignmentName FROM Submissions;";
                 SqlCommand commands = new SqlCommand(sqls, sqlConn);
-                SqlDataReader read = commands.ExecuteReader();
+                SqlDataReader reader = commands.ExecuteReader();
 
-                submissionsListBox.ItemsSource = read;
+                reader.Read();
 
+                int fieldCount = reader.FieldCount;
+
+                while (reader.Read())
+                {
+                    submissionsListBox.Items.Add(reader["AssignmentName"]);
+                }
+
+               
             }
 
-
-            //////////////////////////////////////////////
-            /// Process To Load Data Into GUI
-            /// Uses Foreach Loops & Sets Texts Boxes
-            /////////////////////////////////////////////
-            #region
-
-            //Populates ListView for Submission
             
-            
-            
-           /* foreach (Submission sub in work.Submissions)
-            {
-                
-            }
-
-            //Populates TextBox for Course Name
-            courseNameBox.Text = work.CourseName;
-
-            //Populates TextBox for Grade
-            overallGradeTextBox.Text = work.CalculateGrade().ToString();
-            #endregion*/
         }
-        #endregion
-    
+        
+        
 
-    /// <summary>
-    /// Method to Display About Pop-up
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void aboutMenuItem_Click(object sender, RoutedEventArgs e)
+       
+
+
+        /// <summary>
+        /// Method to Display About Pop-up
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void aboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
             string s;
             s = "Course Work GUI \n Version 2.0 \n Written by Earl Platt III";
             MessageBox.Show(s);
+        }
+
+        private void submissionsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selected = submissionsListBox.SelectedItem.ToString();
+
+            string sqls = "SELECT AssignmentName, CategoryName, Grade FROM Submissions WHERE AssignmentName =" 
+                + "'" + selected + "'" + ";";
+            SqlCommand commands = new SqlCommand(sqls, sqlConn);
+            SqlDataReader reader = commands.ExecuteReader();
+            reader.Read();
+            int fieldCount = reader.FieldCount;
+            assignmentNameTextBox.Text = reader["AssignmentName"].ToString();
+            categoryNameTextBox.Text = reader["CategoryName"].ToString();
+            gradeTextBox.Text = reader["Grade"].ToString();
         }
     }
 }
