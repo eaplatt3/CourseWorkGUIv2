@@ -18,6 +18,17 @@ using System.Windows.Shapes;
 using CourseWorkLibraryV2;
 using Microsoft.Win32;
 
+//////////////////////////////////////////////////////////////
+// File: MainWindow.xaml.cs                                 //
+//                                                          //
+// Purpose: Contains Methods & Querires to populate GUI     //
+//                                                          //
+// Written By: Earl Platt III                               //
+//                                                          //
+// Compiler: Visual Studio 2019                             //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
 namespace CourseWorkGUIv2
 {
     /// <summary>
@@ -39,17 +50,9 @@ namespace CourseWorkGUIv2
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Method to Exit Program
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void menuItemExit_Click(object sender, RoutedEventArgs e)
-        {
-            System.Environment.Exit(1);
-        }
 
-        
+
+        #region
         /// <summary>
         /// Method to Import Json File
         /// </summary>
@@ -62,7 +65,7 @@ namespace CourseWorkGUIv2
             /// Read Json File In 
             /// From Explorer
             //////////////////////////////////////////////////
-            #region
+            
             OpenFileDialog ofd = new OpenFileDialog();
 
             //Opens Windows Explorer
@@ -81,7 +84,7 @@ namespace CourseWorkGUIv2
 
             if (ofd.ShowDialog() == true)
             {
-               // fileNameTextBox.Text = ofd.FileName;
+               
                fileNameRead = ofd.FileName;
             }
             else { return; }
@@ -100,9 +103,9 @@ namespace CourseWorkGUIv2
             inputSerializer = new DataContractJsonSerializer(typeof(CourseWork));
             work = (CourseWork)inputSerializer.ReadObject(stream);
             stream.Close();
-            #endregion
+            
 
-            //TO DO: Fix Database Population 
+            #region
             //////////////////////////////////////////////
             /// Process To Load Data Into Database
             /// Uses Foreach Loops to Populate Database
@@ -118,11 +121,10 @@ namespace CourseWorkGUIv2
                 "integrated security=SSPI;" +
                 "database=CourseWork;" + "MultipleActiveresultSets = True";
 
+                //Inserts Values from DLL into Database
                 string sql = string.Format("INSERT INTO Submissions" +
                         "(AssignmentName, CategoryName, Grade) Values" +
                         "('{0}', '{1}', '{2}')", sub.AssignmentName, sub.CategoryName, sub.Grade);
-
-
                 
                 sqlConn = new SqlConnection(connString);
                 sqlConn.Open();
@@ -130,6 +132,7 @@ namespace CourseWorkGUIv2
                 SqlCommand command = new SqlCommand(sql, sqlConn);
                 int rowsAffected = command.ExecuteNonQuery();
 
+                //Selects All Assignments from Database
                 string sqls = "SELECT AssignmentName FROM Submissions;";
                 SqlCommand commands = new SqlCommand(sqls, sqlConn);
                 SqlDataReader reader = commands.ExecuteReader();
@@ -138,6 +141,7 @@ namespace CourseWorkGUIv2
 
                 int fieldCount = reader.FieldCount;
 
+                //Loop Adds Assignments Queried from Database into ListBox
                 while (reader.Read())
                 {
                     submissionsListBox.Items.Add(reader["AssignmentName"]);
@@ -145,15 +149,12 @@ namespace CourseWorkGUIv2
 
                
             }
+            #endregion
 
-            
         }
-        
-        
+        #endregion
 
-       
-
-
+        #region
         /// <summary>
         /// Method to Display About Pop-up
         /// </summary>
@@ -165,7 +166,14 @@ namespace CourseWorkGUIv2
             s = "Course Work GUI \n Version 2.0 \n Written by Earl Platt III";
             MessageBox.Show(s);
         }
+        #endregion
 
+        #region
+        /// <summary>
+        /// Method to display AssignmentName, CategoryName & Grade in text Box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void submissionsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string selected = submissionsListBox.SelectedItem.ToString();
@@ -180,5 +188,22 @@ namespace CourseWorkGUIv2
             categoryNameTextBox.Text = reader["CategoryName"].ToString();
             gradeTextBox.Text = reader["Grade"].ToString();
         }
+        #endregion
+
+        #region
+        /// <summary>
+        /// Method to Exit Program
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuItemExit_Click(object sender, RoutedEventArgs e)
+        {
+            //Command to delete all rows from table
+            //string exitSql = "DELETE FROM Submissions;";
+            //SqlCommand comm = new SqlCommand(exitSql, sqlConn);
+            //int rowsAffected = comm.ExecuteNonQuery();
+            System.Environment.Exit(1);
+        }
+        #endregion
     }
 }
